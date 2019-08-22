@@ -7,6 +7,20 @@ import static org.junit.Assert.*;
 public class TestMidiUtil
 {
     @Test
+    public void testBpmToMpqn()
+    {
+        assertEquals(500_000, MidiUtil.bpmToMpqn(120.0f));
+        assertEquals(1_000_000, MidiUtil.bpmToMpqn(60.0f));
+    }
+
+    @Test
+    public void testMpqnToBpm()
+    {
+        assertEquals(60.0f, MidiUtil.mpqnToBpm(1_000_000), 0.001f);
+        assertEquals(120.0f, MidiUtil.mpqnToBpm(500_000), 0.001f);
+    }
+
+    @Test
     public void testMidiNoteToPitch()
     {
         assertEquals("C", MidiUtil.midiNoteToPitch(0));

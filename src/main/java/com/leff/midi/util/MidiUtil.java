@@ -43,12 +43,26 @@ public class MidiUtil
 
     public static int bpmToMpqn(float bpm)
     {
-        return (int) (bpm * 60000000);
+        // let b be a variable number of beats per minute
+        // 60,000,000 µsec/min ÷ b beat/min   =
+        // 60,000,000 µsec/min • 1/b min/beat =
+        //
+        //   the "mins" cancel out
+        //
+        // 60,000,000 µsec     ÷ b beat       = ? µsec/beat
+        return (int) Math.round(60_000_000.0 / bpm);
     }
 
     public static float mpqnToBpm(int mpqn)
     {
-        return mpqn / 60000000.0f;
+        // let m be a variable number of micro-seconds per beat
+        // 60,000,000 µsec/min ÷ m µsec/beat   =
+        // 60,000,000 µsec/min • 1/m beat/µsec =
+        //
+        //   the "µsecs" cancel out
+        //
+        // 60,000,000 beat      • m min        = ? beat/min
+        return 60_000_000.0f / mpqn;
     }
 
     public static int midiNoteOctave(int note) {
