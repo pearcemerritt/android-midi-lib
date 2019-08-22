@@ -10,7 +10,7 @@ public class TestController
     public void testToString()
     {
         // 64 is the damper pedal
-        assertEquals("0 (0): Controller 64 0",
+        assertEquals("0 (0): Controller ch0 64 0",
                 new Controller(0, 0, 64, 0).toString());
     }
 }

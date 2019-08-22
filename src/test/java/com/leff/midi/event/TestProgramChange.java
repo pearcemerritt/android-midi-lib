@@ -9,7 +9,7 @@ public class TestProgramChange
     @Test
     public void testToString()
     {
-        assertEquals("0 (0): ProgramChange ACOUSTIC_GRAND_PIANO",
+        assertEquals("0 (0): ProgramChange ch0 ACOUSTIC_GRAND_PIANO",
                 new ProgramChange(0, 0, 0).toString());
     }
 }

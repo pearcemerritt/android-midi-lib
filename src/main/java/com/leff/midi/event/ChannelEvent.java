@@ -140,6 +140,11 @@ public class ChannelEvent extends MidiEvent
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s ch%s", super.toString(), mChannel);
+    }
+
     public static ChannelEvent parseChannelEvent(long tick, long delta, int type, int channel, InputStream in) throws IOException
     {
         int val1 = in.read();

@@ -9,6 +9,6 @@ public class TestNoteOff
     @Test
     public void testToString()
     {
-        assertEquals("0 (0): NoteOff C4 0", new NoteOff(0, 0, 60, 0).toString());
+        assertEquals("0 (0): NoteOff ch0 C4 0", new NoteOff(0, 0, 60, 0).toString());
     }
 }
