@@ -47,4 +47,9 @@ public class Controller extends ChannelEvent
     {
         mValue2 = v;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %s", super.toString(), mValue1, mValue2);
+    }
 }
