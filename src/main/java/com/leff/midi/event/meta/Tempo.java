@@ -19,7 +19,6 @@ package com.leff.midi.event.meta;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.leff.midi.event.MidiEvent;
 import com.leff.midi.util.MidiUtil;
 import com.leff.midi.util.VariableLengthInt;
 
@@ -80,6 +79,11 @@ public class Tempo extends MetaEvent
         out.write(MidiUtil.intToBytes(mMPQN, 3));
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s %.1f bpm", super.toString(), mBPM);
+    }
+
     public static MetaEvent parseTempo(long tick, long delta, MetaEventData info)
     {
         if(info.length.getValue() != 3)
@@ -90,31 +94,5 @@ public class Tempo extends MetaEvent
         int mpqn = MidiUtil.bytesToInt(info.data, 0, 3);
 
         return new Tempo(tick, delta, mpqn);
-    }
-
-    @Override
-    public int compareTo(MidiEvent other)
-    {
-        if(mTick != other.getTick())
-        {
-            return mTick < other.getTick() ? -1 : 1;
-        }
-        if(mDelta.getValue() != other.getDelta())
-        {
-            return mDelta.getValue() < other.getDelta() ? 1 : -1;
-        }
-
-        if(!(other instanceof Tempo))
-        {
-            return 1;
-        }
-
-        Tempo o = (Tempo) other;
-
-        if(mMPQN != o.mMPQN)
-        {
-            return mMPQN < o.mMPQN ? -1 : 1;
-        }
-        return 0;
     }
 }
