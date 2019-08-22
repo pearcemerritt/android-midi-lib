@@ -16,6 +16,8 @@
 
 package com.leff.midi.event;
 
+import com.leff.midi.util.MidiUtil;
+
 public class NoteOff extends ChannelEvent
 {
     public NoteOff(long tick, int channel, int note, int velocity)
@@ -46,5 +48,13 @@ public class NoteOff extends ChannelEvent
     public void setVelocity(int v)
     {
         mValue2 = v;
+    }
+
+    @Override
+    public String toString()
+    {
+        String pitchString = String.format("%s%d",
+                MidiUtil.midiNoteToPitch(mValue1), MidiUtil.midiNoteOctave(mValue1));
+        return String.format("%s %s %s", super.toString(), pitchString, mValue2);
     }
 }
