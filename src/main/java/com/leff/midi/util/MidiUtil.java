@@ -51,6 +51,24 @@ public class MidiUtil
         return mpqn / 60000000.0f;
     }
 
+    public static int midiNoteOctave(int note) {
+        if (note < 0 || note > 127)
+            throw new IllegalArgumentException(String.format("Invalid midi note (%d)", note));
+
+        return (note / 12) - 1;
+    }
+
+    public static final String[] CHROMATIC_PITCHES = new String[] {
+            "C", "Db/C#", "D", "Eb/D#", "E", "F", "Gb/F#", "G", "Ab/G#", "A", "Bb/A#", "B" };
+
+    public static String midiNoteToPitch(int note)
+    {
+        if (note < 0 || note > 127)
+            throw new IllegalArgumentException(String.format("Invalid midi note (%d)", note));
+
+        return CHROMATIC_PITCHES[note % 12];
+    }
+
     /**
      * Utility methods for working with bytes and byte buffers
      */
