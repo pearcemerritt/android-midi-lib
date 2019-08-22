@@ -83,44 +83,25 @@ public class ChannelEvent extends MidiEvent
     @Override
     public int compareTo(MidiEvent other)
     {
-        if(mTick != other.getTick())
+        if(super.compareTo(other) != 0)
         {
-            return mTick < other.getTick() ? -1 : 1;
-        }
-        if(mDelta.getValue() != other.mDelta.getValue())
-        {
-            return mDelta.getValue() < other.mDelta.getValue() ? 1 : -1;
+            return super.compareTo(other);
         }
 
+        // Makes organizational sense to put ChannelEvents after events
+        // like MetaEvents and SystemExclusiveEvents.
         if(!(other instanceof ChannelEvent))
         {
             return 1;
         }
 
         ChannelEvent o = (ChannelEvent) other;
-        if(mType != o.getType())
+        if(mType != o.mType)
         {
-            if(mOrderMap == null)
-            {
-                buildOrderMap();
-            }
-
             int order1 = mOrderMap.get(mType);
             int order2 = mOrderMap.get(o.getType());
 
-            return order1 < order2 ? -1 : 1;
-        }
-        if(mValue1 != o.mValue1)
-        {
-            return mValue1 < o.mValue1 ? -1 : 1;
-        }
-        if(mValue2 != o.mValue2)
-        {
-            return mValue2 < o.mValue2 ? -1 : 1;
-        }
-        if(mChannel != o.getChannel())
-        {
-            return mChannel < o.getChannel() ? -1 : 1;
+            return Integer.compare(order1, order2);
         }
         return 0;
     }
@@ -189,20 +170,6 @@ public class ChannelEvent extends MidiEvent
         }
     }
 
-    private static void buildOrderMap()
-    {
-
-        mOrderMap = new HashMap<Integer, Integer>();
-
-        mOrderMap.put(PROGRAM_CHANGE, 0);
-        mOrderMap.put(CONTROLLER, 1);
-        mOrderMap.put(NOTE_ON, 2);
-        mOrderMap.put(NOTE_OFF, 3);
-        mOrderMap.put(NOTE_AFTERTOUCH, 4);
-        mOrderMap.put(CHANNEL_AFTERTOUCH, 5);
-        mOrderMap.put(PITCH_BEND, 6);
-    }
-
     public static final int NOTE_OFF = 0x8;
     public static final int NOTE_ON = 0x9;
     public static final int NOTE_AFTERTOUCH = 0xA;
@@ -210,4 +177,17 @@ public class ChannelEvent extends MidiEvent
     public static final int PROGRAM_CHANGE = 0xC;
     public static final int CHANNEL_AFTERTOUCH = 0xD;
     public static final int PITCH_BEND = 0xE;
+
+    static 
+    {
+        mOrderMap = new HashMap<Integer, Integer>();
+        
+        mOrderMap.put(PROGRAM_CHANGE, 0);
+        mOrderMap.put(CONTROLLER, 1);
+        mOrderMap.put(NOTE_OFF, 2);
+        mOrderMap.put(NOTE_ON, 3);
+        mOrderMap.put(NOTE_AFTERTOUCH, 4);
+        mOrderMap.put(CHANNEL_AFTERTOUCH, 5);
+        mOrderMap.put(PITCH_BEND, 6);
+    }
 }

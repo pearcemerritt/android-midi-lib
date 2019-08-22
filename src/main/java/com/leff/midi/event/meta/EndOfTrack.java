@@ -46,19 +46,7 @@ public class EndOfTrack extends MetaEvent
     @Override
     public int compareTo(MidiEvent other)
     {
-        if(mTick != other.getTick())
-        {
-            return mTick < other.getTick() ? -1 : 1;
-        }
-        if(mDelta.getValue() != other.getDelta())
-        {
-            return mDelta.getValue() < other.getDelta() ? 1 : -1;
-        }
-
-        if(!(other instanceof EndOfTrack))
-        {
-            return 1;
-        }
-        return 0;
+        // Should always go after every other event
+        return 1;
     }
 }

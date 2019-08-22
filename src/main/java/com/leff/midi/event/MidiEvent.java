@@ -78,7 +78,16 @@ public abstract class MidiEvent implements Comparable<MidiEvent>
         out.write(mDelta.getBytes());
     }
 
-    private static int sId = -1;
+    @Override
+	public int compareTo(MidiEvent other) {
+        if(mTick != other.mTick)
+        {
+            return Long.compare(mTick, other.mTick);
+        }
+        return mDelta.compareTo(other.mDelta);
+	}
+
+	private static int sId = -1;
     private static int sType = -1;
     private static int sChannel = -1;
 

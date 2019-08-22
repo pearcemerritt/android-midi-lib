@@ -51,6 +51,24 @@ public abstract class MetaEvent extends MidiEvent
         out.write(mType);
     }
 
+    @Override
+    public int compareTo(MidiEvent other)
+    {
+        if(super.compareTo(other) != 0)
+        {
+            return super.compareTo(other);
+        }
+
+        // Makes organizational sense to put MetaEvents before events
+        // like ChannelEvents. Doesn't matter if it's before or after
+        // SystemExclusiveEvents.
+        if(!(other instanceof MetaEvent))
+        {
+            return -1;
+        }
+        return 0;
+    }
+
     public static MetaEvent parseMetaEvent(long tick, long delta, InputStream in) throws IOException
     {
         MetaEventData eventData = new MetaEventData(in);

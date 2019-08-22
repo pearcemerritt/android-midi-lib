@@ -80,32 +80,19 @@ public class SystemExclusiveEvent extends MidiEvent
     @Override
     public int compareTo(MidiEvent other)
     {
-        if(this.mTick < other.mTick)
+        if(super.compareTo(other) != 0)
+        {
+            return super.compareTo(other);
+        }
+
+        // Makes organizational sense to put SystemExclusiveEvents before
+        // events like ChannelEvents. Doesn't matter if it's before or after
+        // MetaEvents.
+        if(!(other instanceof SystemExclusiveEvent))
         {
             return -1;
         }
-        if(this.mTick > other.mTick)
-        {
-            return 1;
-        }
-
-        if(this.mDelta.getValue() > other.mDelta.getValue())
-        {
-            return -1;
-        }
-        if(this.mDelta.getValue() < other.mDelta.getValue())
-        {
-            return 1;
-        }
-
-        if(other instanceof SystemExclusiveEvent)
-        {
-            String curr = new String(mData);
-            String comp = new String(((SystemExclusiveEvent) other).mData);
-            return curr.compareTo(comp);
-        }
-
-        return 1;
+        return 0;
     }
 
     @Override
