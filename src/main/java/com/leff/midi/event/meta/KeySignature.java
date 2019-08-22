@@ -18,8 +18,9 @@ package com.leff.midi.event.meta;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.leff.midi.event.MidiEvent;
 import com.leff.midi.util.VariableLengthInt;
 
 public class KeySignature extends MetaEvent
@@ -79,6 +80,57 @@ public class KeySignature extends MetaEvent
         out.write(mScale);
     }
 
+    @Override
+    public String toString() {
+        String key;
+        if (mScale == 0)
+        {
+            key = MAJOR_CIRCLE_OF_FIFTHS.get(mKey) + " major";
+        }
+        else
+        {
+            key = MINOR_CIRCLE_OF_FIFTHS.get(mKey) + " minor";
+        }
+        return String.format("%s %s", super.toString(), key);
+    }
+
+    public static final Map<Integer, String> MAJOR_CIRCLE_OF_FIFTHS = new HashMap<Integer, String>();
+    public static final Map<Integer, String> MINOR_CIRCLE_OF_FIFTHS = new HashMap<Integer, String>();
+
+    static {
+        MAJOR_CIRCLE_OF_FIFTHS.put(-7, "Cb");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-6, "Gb");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-5, "Db");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-4, "Ab");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-3, "Eb");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-2, "Bb");
+        MAJOR_CIRCLE_OF_FIFTHS.put(-1, "F");
+        MAJOR_CIRCLE_OF_FIFTHS.put(0, "C");
+        MAJOR_CIRCLE_OF_FIFTHS.put(1, "G");
+        MAJOR_CIRCLE_OF_FIFTHS.put(2, "D");
+        MAJOR_CIRCLE_OF_FIFTHS.put(3, "A");
+        MAJOR_CIRCLE_OF_FIFTHS.put(4, "E");
+        MAJOR_CIRCLE_OF_FIFTHS.put(5, "B");
+        MAJOR_CIRCLE_OF_FIFTHS.put(6, "F#");
+        MAJOR_CIRCLE_OF_FIFTHS.put(7, "C#");
+
+        MINOR_CIRCLE_OF_FIFTHS.put(-7, "Ab");
+        MINOR_CIRCLE_OF_FIFTHS.put(-6, "Eb");
+        MINOR_CIRCLE_OF_FIFTHS.put(-5, "Bb");
+        MINOR_CIRCLE_OF_FIFTHS.put(-4, "F");
+        MINOR_CIRCLE_OF_FIFTHS.put(-3, "C");
+        MINOR_CIRCLE_OF_FIFTHS.put(-2, "G");
+        MINOR_CIRCLE_OF_FIFTHS.put(-1, "D");
+        MINOR_CIRCLE_OF_FIFTHS.put(0, "A");
+        MINOR_CIRCLE_OF_FIFTHS.put(1, "E");
+        MINOR_CIRCLE_OF_FIFTHS.put(2, "B");
+        MINOR_CIRCLE_OF_FIFTHS.put(3, "F#");
+        MINOR_CIRCLE_OF_FIFTHS.put(4, "C#");
+        MINOR_CIRCLE_OF_FIFTHS.put(5, "G#");
+        MINOR_CIRCLE_OF_FIFTHS.put(6, "D#");
+        MINOR_CIRCLE_OF_FIFTHS.put(7, "A#");
+    }
+
     public static MetaEvent parseKeySignature(long tick, long delta, MetaEventData info)
     {
         if(info.length.getValue() != 2)
@@ -90,36 +142,5 @@ public class KeySignature extends MetaEvent
         int scale = info.data[1];
 
         return new KeySignature(tick, delta, key, scale);
-    }
-
-    @Override
-    public int compareTo(MidiEvent other)
-    {
-        if(mTick != other.getTick())
-        {
-            return mTick < other.getTick() ? -1 : 1;
-        }
-        if(mDelta.getValue() != other.getDelta())
-        {
-            return mDelta.getValue() < other.getDelta() ? 1 : -1;
-        }
-
-        if(!(other instanceof KeySignature))
-        {
-            return 1;
-        }
-
-        KeySignature o = (KeySignature) other;
-        if(mKey != o.mKey)
-        {
-            return mKey < o.mKey ? -1 : 1;
-        }
-
-        if(mScale != o.mScale)
-        {
-            return mKey < o.mScale ? -1 : 1;
-        }
-
-        return 0;
     }
 }
