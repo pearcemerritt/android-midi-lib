@@ -45,7 +45,7 @@ import java.io.InputStream;
  * <p>
  * The largest number which is allowed is 0FFFFFFF 
  */
-public class VariableLengthInt
+public class VariableLengthInt implements Comparable<VariableLengthInt>
 {
     private int mValue;
     private byte[] mBytes;
@@ -153,6 +153,11 @@ public class VariableLengthInt
         {
             mBytes[i] = (byte) vals[mSizeInBytes - i - 1];
         }
+    }
+
+    @Override
+    public int compareTo(VariableLengthInt o) {
+        return Integer.compare(mValue, o.mValue);
     }
 
     @Override

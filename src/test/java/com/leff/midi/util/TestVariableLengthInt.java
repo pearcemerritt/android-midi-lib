@@ -168,7 +168,14 @@ public class TestVariableLengthInt
         assertEquals(3, vli.getByteCount());
         assertArrayEquals(new byte[] { (byte) 0xC0, (byte) 0x80, 0x00 }, vli.getBytes());
     }
-    
+
+    @Test
+    public void testCompareTo() {
+        assertEquals(0, new VariableLengthInt(0).compareTo(new VariableLengthInt(0)));
+        assertEquals(1, new VariableLengthInt(1).compareTo(new VariableLengthInt(0)));
+        assertEquals(-1, new VariableLengthInt(0).compareTo(new VariableLengthInt(1)));
+    }
+
     @Test
     public void testToString() {
         assertEquals("00  (0)", new VariableLengthInt(0).toString());
