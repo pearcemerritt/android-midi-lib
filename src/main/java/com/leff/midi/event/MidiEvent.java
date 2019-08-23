@@ -91,7 +91,7 @@ public abstract class MidiEvent implements Comparable<MidiEvent>
         // should go first. Hence we are calling compare on the other event.
         // If the other has a higher (non-zero) delta, then this object should
         // go after it, rather than before it, in a sorting.
-        if (mDelta != other.mDelta)
+        if (!mDelta.equals(other.mDelta))
         {
             return other.mDelta.compareTo(mDelta);
         }

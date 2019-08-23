@@ -156,8 +156,22 @@ public class VariableLengthInt implements Comparable<VariableLengthInt>
     }
 
     @Override
-    public int compareTo(VariableLengthInt o) {
-        return Integer.compare(mValue, o.mValue);
+    public int compareTo(VariableLengthInt other) {
+        return Integer.compare(mValue, other.mValue);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj.getClass() == VariableLengthInt.class)
+        {
+            return 0 == compareTo((VariableLengthInt) obj);
+        }
+        return false;
     }
 
     @Override
