@@ -59,14 +59,17 @@ public abstract class MetaEvent extends MidiEvent
             return super.compareTo(other);
         }
 
-        // Makes organizational sense to put MetaEvents before events
-        // like ChannelEvents. Doesn't matter if it's before or after
-        // SystemExclusiveEvents.
-        if(!(other instanceof MetaEvent))
-        {
-            return -1;
-        }
-        return 0;
+        return compareTo((MetaEvent) other);
+    }
+
+    protected int compareTo(MetaEvent other) {
+        // Meta events should never be equal (unless they override)
+        // so that we may have as many text events as is needed and
+        // since we always say that any one is bigger than they other,
+        // the order is random (or rather, however they are entered
+        // into an ordering, assuming comparison calls are made on
+        // the inserted event)
+        return 1;
     }
 
     public static MetaEvent parseMetaEvent(long tick, long delta, InputStream in) throws IOException

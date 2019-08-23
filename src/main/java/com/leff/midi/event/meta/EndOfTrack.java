@@ -19,7 +19,6 @@ package com.leff.midi.event.meta;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.leff.midi.event.MidiEvent;
 import com.leff.midi.util.VariableLengthInt;
 
 public class EndOfTrack extends MetaEvent
@@ -44,9 +43,17 @@ public class EndOfTrack extends MetaEvent
     }
 
     @Override
-    public int compareTo(MidiEvent other)
-    {
-        // Should always go after every other event
-        return 1;
+    protected int compareTo(MetaEvent other) {
+        // Shouldn't happen unless coder is confused.
+        if (other.getClass() != EndOfTrack.class)
+        {
+            throw new IllegalStateException("Calling protected method incorrectly. " +
+                    "EndOfTrack.compareTo(MetaEvent) should only be called when it is " +
+                    "established that the other class is also a EndOfTrack");
+        }
+
+        // If end of track events have the same tick, they are equal and only
+        // is needed.
+        return 0;
     }
 }
