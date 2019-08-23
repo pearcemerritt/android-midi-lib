@@ -79,12 +79,25 @@ public abstract class MidiEvent implements Comparable<MidiEvent>
     }
 
     @Override
-	public int compareTo(MidiEvent other) {
+    public int compareTo(MidiEvent other)
+    {
+        // First start with the absolute tick of a midi event. That must be the
+        // highest governing principle
         if(mTick != other.mTick)
         {
             return Long.compare(mTick, other.mTick);
         }
-        return mDelta.compareTo(other.mDelta);
+        // Second we need to make sure that any event that has a non-zero delta
+        // should go first. Hence we are calling compare on the other event.
+        // If the other has a higher (non-zero) delta, then this object should
+        // go after it, rather than before it, in a sorting.
+        if (mDelta != other.mDelta)
+        {
+            return other.mDelta.compareTo(mDelta);
+        }
+
+        return Integer.compare(
+                OpinionatedMidiEventOrdering.get(this), OpinionatedMidiEventOrdering.get(other));
 	}
 
 	private static int sId = -1;
