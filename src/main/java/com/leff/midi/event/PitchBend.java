@@ -62,4 +62,22 @@ public class PitchBend extends ChannelEvent
         mValue1 = (amount & 0x7F);
         mValue2 = amount >> 7;
     }
+
+    @Override
+    protected int compareTo(ChannelEvent other)
+    {
+        if (other.getClass() != PitchBend.class)
+        {
+            throw new IllegalStateException("Calling protected method incorrectly. " +
+                    "PitchBend.compareTo(ChannelEvent) should only be called when it is " +
+                    "established that the other class is also a PitchBend");
+        }
+
+        if(mChannel != other.mChannel)
+        {
+            return Integer.compare(mChannel, other.mChannel);
+        }
+        PitchBend o = (PitchBend) other;
+        return Integer.compare(getBendAmount(), o.getBendAmount());
+    }
 }

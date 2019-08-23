@@ -51,6 +51,25 @@ public class NoteOff extends ChannelEvent
     }
 
     @Override
+    protected int compareTo(ChannelEvent other)
+    {
+        // Should only happen if coder is confused
+        if (other.getClass() != NoteOff.class)
+        {
+            throw new IllegalStateException("Calling protected method incorrectly. " +
+                    "NoteOff.compareTo(ChannelEvent) should only be called when it is " +
+                    "established that the other class is also a NoteOff");
+        }
+
+        if(mChannel != other.mChannel)
+        {
+            return Integer.compare(mChannel, other.mChannel);
+        }
+        // Ignore velocity
+        return Integer.compare(mValue1, other.mValue1);
+    }
+
+    @Override
     public String toString()
     {
         String pitchString = String.format("%s%d",

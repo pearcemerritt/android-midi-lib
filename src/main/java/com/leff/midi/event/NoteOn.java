@@ -51,6 +51,44 @@ public class NoteOn extends ChannelEvent
     }
 
     @Override
+    protected int compareTo(ChannelEvent other)
+    {
+        // Should only happen if coder is confused
+        if (other.getClass() != NoteOn.class)
+        {
+            throw new IllegalStateException("Calling protected method incorrectly. " +
+                    "NoteOn.compareTo(ChannelEvent) should only be called when it is " +
+                    "established that the other class is also a NoteOn");
+        }
+
+        if(mChannel != other.mChannel)
+        {
+            return Integer.compare(mChannel, other.mChannel);
+        }
+
+        // If neither event is acting as a note-off event, then we
+        // can determine equality based off pitch. We ignore velocity
+        // and don't let two events with the same pitch (and time/channel
+        // etc.) get played twice at the same time.
+        if (mValue2 != 0 && other.mValue2 != 0)
+        {
+            return Integer.compare(mValue1, other.mValue1);
+        }
+        // If both event are acting as a note-off events, then we
+        // can determine equality based off pitch.
+        else if (mValue2 == 0 && other.mValue2 == 0)
+        {
+            return Integer.compare(mValue1, other.mValue1);
+        }
+        // Otherwise, one of the events is acting as a note-off event, so we
+        // want it to be first.
+        else
+        {
+            return Integer.compare(mValue2, other.mValue2);
+        }
+    }
+
+    @Override
     public String toString()
     {
         String pitchString = String.format("%s%d", 
