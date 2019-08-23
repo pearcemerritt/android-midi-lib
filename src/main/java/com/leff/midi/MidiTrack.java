@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -363,6 +364,39 @@ public class MidiTrack
             event.writeToFile(out, event.requiresStatusByte(lastEvent));
 
             lastEvent = event;
+        }
+    }
+
+    private static class inOrderOfAddComparator implements Comparator<MidiEvent>
+    {
+        @Override
+        public int compare(MidiEvent event1, MidiEvent event2)
+        {
+            return 1;
+        }
+    }
+
+    public static class Builder
+    {
+        private TreeSet<MidiEvent> events = new TreeSet<MidiEvent>(new inOrderOfAddComparator());
+        private long currentTick = 0;
+
+        public Builder addSequentialEvent(MidiEvent event)
+        {
+            if (event.getTick() > currentTick) {
+                event.setDelta(event.getTick() - currentTick);
+                currentTick = event.getTick();
+            }
+            events.add(event);
+            return this;
+        }
+
+        public MidiTrack build()
+        {
+            MidiTrack midiTrack = new MidiTrack();
+            midiTrack.mEvents = new TreeSet<MidiEvent>(events);
+            midiTrack.mSizeNeedsRecalculating = true;
+            return midiTrack;
         }
     }
 }
