@@ -88,20 +88,22 @@ public class ChannelEvent extends MidiEvent
             return super.compareTo(other);
         }
 
-        // Makes organizational sense to put ChannelEvents after events
-        // like MetaEvents and SystemExclusiveEvents.
-        if(!(other instanceof ChannelEvent))
+        return compareTo((ChannelEvent) other);
+    }
+
+    protected int compareTo(ChannelEvent other)
+    {
+        if(mChannel != other.mChannel)
         {
-            return 1;
+            return Integer.compare(mChannel, other.mChannel);
         }
-
-        ChannelEvent o = (ChannelEvent) other;
-        if(mType != o.mType)
+        if(mValue1 != other.mValue1)
         {
-            int order1 = mOrderMap.get(mType);
-            int order2 = mOrderMap.get(o.getType());
-
-            return Integer.compare(order1, order2);
+            return Integer.compare(mValue1, other.mValue1);
+        }
+        if(mValue2 != other.mValue2)
+        {
+            return Integer.compare(mValue2, other.mValue2);
         }
         return 0;
     }
